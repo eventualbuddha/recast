@@ -34,7 +34,7 @@
     "source-map": "~0.6.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0-beta.54",
+    "@babel/core": "^7.1.2",
     "@babel/parser": "^7.0.0-beta.54",
     "@babel/preset-env": "^7.0.0-beta.54",
     "esprima-fb": "^15001.1001.0-dev-harmony-fb",
