@@ -23,6 +23,8 @@
   "types": "main.d.ts",
   "scripts": {
     "mocha": "test/run.sh",
+    "lint": "eslint --ext ts lib test",
+    "fix:lint": "npm run lint -- --fix",
     "debug": "test/run.sh --inspect-brk",
     "test": "npm run build && npm run mocha",
     "build": "npm run clean && tsc",
@@ -47,6 +49,8 @@
     "@types/glob": "7.1.1",
     "@types/mocha": "5.2.6",
     "@types/node": "12.0.2",
+    "@typescript-eslint/parser": "^1.11.0",
+    "eslint": "^6.0.1",
     "esprima-fb": "15001.1001.0-dev-harmony-fb",
     "flow-parser": "0.98.1",
     "glob": "7.1.4",
