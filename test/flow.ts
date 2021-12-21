@@ -118,6 +118,7 @@ describe("type syntax", function () {
     // Generic
     check("var a: Array<Foo>;");
     check("var a: number[];");
+    check("var a: <T>() => T;");
 
     // Return types
     check("function a(): number {}");
@@ -210,5 +211,36 @@ describe("type syntax", function () {
     check("createPlugin<number>();", flowParserParseOptions);
 
     check("function myFunction([param1]: Params) {}", flowParserParseOptions);
+  });
+
+  it("can pretty-print [Optional]IndexedAccessType AST nodes", () => {
+    check("type A = Obj?.['a'];", flowParserParseOptions);
+    check("type B = Array<string>?.[number];", flowParserParseOptions);
+    check("type C = Obj?.['bar']['baz'];", flowParserParseOptions);
+    check("type D = (Obj?.['bar'])['baz'];", flowParserParseOptions);
+    check("type E = Obj?.['bar'][];", flowParserParseOptions);
+    check("type F = Obj?.['bar'][boolean][];", flowParserParseOptions);
+    check("type G = Obj['bar']?.[boolean][];", flowParserParseOptions);
+    check("type H = (Obj?.['bar'])[string][];", flowParserParseOptions);
+    check("type I = Obj?.['bar']?.[string][];", flowParserParseOptions);
+
+    function checkEquiv(a: string, b: string) {
+      const aAst = parse(a, flowParserParseOptions);
+      const bAst = parse(b, flowParserParseOptions);
+      types.astNodesAreEquivalent.assert(aAst, bAst);
+    }
+
+    // Since FastPath#needsParens does not currently add any parentheses to
+    // these expressions, make sure they do not matter for parsing the AST.
+
+    checkEquiv(
+      "type F = (Obj?.['bar'])?.[string][];",
+      "type F = Obj?.['bar']?.[string][];",
+    );
+
+    checkEquiv(
+      "type F = (Obj['bar'])?.[string][];",
+      "type F = Obj['bar']?.[string][];",
+    );
   });
 });

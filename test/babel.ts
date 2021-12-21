@@ -21,7 +21,10 @@ describe("Babel", function () {
     function check(lines: any) {
       const code = lines.join(eol);
       const ast = recast.parse(code, parseOptions);
-      const output = recast.prettyPrint(ast, { tabWidth: 2 }).code;
+      const output = recast.prettyPrint(ast, {
+        tabWidth: 2,
+        wrapColumn: 60,
+      }).code;
       assert.strictEqual(output, code);
     }
 
@@ -382,10 +385,11 @@ describe("Babel", function () {
 
   it("prints numbers in bases other than 10 without converting them", function () {
     const code = [
-      "let decimal = 6;",
+      "let base10 = 6;",
       "let hex = 0xf00d;",
       "let binary = 0b1010;",
       "let octal = 0o744;",
+      "let decimal = 123.456m;",
     ].join(eol);
 
     const ast = recast.parse(code, parseOptions);
