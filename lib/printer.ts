@@ -906,8 +906,10 @@ function genericPrintNoParens(path: any, options: any, print: any) {
 
       return fromString(n.value, options);
 
+    case "StringLiteral":
+        return fromString(nodeStr(n.value, options));
+    
     case "BooleanLiteral": // Babel 6 Literal split
-    case "StringLiteral": // Babel 6 Literal split
     case "Literal":
       // Numeric values may be in bases other than 10. Use their raw
       // representation if equivalent.

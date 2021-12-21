@@ -138,6 +138,23 @@ describe("Babel", function () {
       '  "1"() {}',
       "});",
     ]);
+
+    check([
+      "console.log(",
+      "  100m,",
+      "  9223372036854775807m,",
+      "  0.m,",
+      "  3.1415926535897932m,",
+      "  100.000m,",
+      "  123456.789m",
+      ");"
+    ]);
+
+    // V8IntrinsicIdentifier
+    check([
+      `%DebugPrint("hello");`,
+      `%DebugPrint(%StringParseInt("42", 10));`,
+    ]);
   });
 
   it("babel 6: should not wrap IIFE when reusing nodes", function () {
@@ -434,6 +451,29 @@ describe("Babel", function () {
     assert.strictEqual(
       recast.print(ast).code,
       ["class A {", "  declare public readonly x;", "}"].join(eol),
+    );
+  });
+  
+  it("should keep braces in !(a && b)", function () {
+    const code = '(options || !options.bidirectional) ? false : true;';
+    const ast = recast.parse(code, parseOptions);
+    
+    ast.program.body[0].expression = b.unaryExpression('!', ast.program.body[0].expression.test);
+
+    assert.strictEqual(
+      recast.print(ast).code,
+      '!(options || !options.bidirectional);',
+    );
+  });
+  it("should use single quotes", function () {
+    const code = 'const a = 1;';
+    const ast = recast.parse(code, parseOptions);
+    
+    ast.program.body.unshift(b.expressionStatement(b.stringLiteral('use strict')));
+
+    assert.strictEqual(
+      recast.print(ast, {quote: 'single'}).code,
+      `'use strict';\nconst a = 1;`,
     );
   });
 });
