@@ -5,6 +5,8 @@
 1. to remodel or reconstruct (a literary work, document, sentence, etc.).
 1. to supply (a theater or opera work) with a new cast.
 
+**Fork moved to https://github.com/putoutjs/recast**
+
 # Fork contains unmerged fixes
 
 - ✅ Added import assertions support (https://github.com/benjamn/recast/pull/804)
